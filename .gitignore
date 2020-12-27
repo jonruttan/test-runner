@@ -1,3 +1,6 @@
+# General Rules
+# Taken from <https://github.com/github/gitignore/blob/master/C.gitignore>
+
 # Prerequisites
 *.d
 
@@ -50,3 +53,16 @@ modules.order
 Module.symvers
 Mkfile.old
 dkms.conf
+
+# Generated Documentation
+docs/
+
+# Project Specific Rules
+
+# Editor files
+*.sublime-*
+*~
+
+# Scratchpad
+tmp/
+\#*
