@@ -22,7 +22,7 @@
 #include <time.h>
 
 #define TNORM "\x1B[0m"
-#define TPASS "\x1B[1;42;37m"
+#define TPASS "\x1B[2;30;42m"
 #define TFAIL "\x1B[1;37;41m"
 
 #define KOK "."
