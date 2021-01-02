@@ -23,7 +23,7 @@ test-runner is a minimalist, portable unit testing framework for C. The implemen
 2. Write some tests
    ```sh
    mkdir tests
-   cp -a examples/minimal/*.c tests
+   cp -a test-runner/examples/minimal/*.c tests
    tree tests # list contents of directories in a tree-like format
    ```
    *output*
