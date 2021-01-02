@@ -2,7 +2,7 @@
  * # Test Runner in a C header
  *
  * Adapted from:
- *   - <http://ryepdx.com/2014/09/tdd-in-c/>
+ *   - <https://web.archive.org/web/20140929091701/ryepdx.com/2014/09/tdd-in-c/>
  *   - <http://eradman.com/posts/tdd-in-c.html>
  *
  * ## Usage
@@ -31,6 +31,11 @@
 
 #define RUN 0
 #define SKIP 1
+
+#ifndef TEST_RUNNER_OVERHEAD
+#define setup()
+#define teardown()
+#endif /* TEST_RUNNER_OVERHEAD */
 
 int _tests[2] = { 0, 0 },
 	_asserts[2] = { 0, 0 },
