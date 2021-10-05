@@ -42,10 +42,11 @@
  *
  * @constant TEST_RUNNER_VERSION
  */
-#define TEST_RUNNER_VERSION "1.0.1"
+#define TEST_RUNNER_VERSION "1.1.0"
 
 #define TNORM "\x1B[0m"
 #define TPASS "\x1B[2;30;42m"
+#define TWARN "\x1B[2;30;43m"
 #define TFAIL "\x1B[1;37;41m"
 
 #define KOK "."
@@ -54,14 +55,15 @@
 
 #define RUN 0
 #define SKIP 1
+#define EMPTY 2
 
 #ifndef TEST_RUNNER_OVERHEAD
 #define setup()
 #define teardown()
 #endif /* TEST_RUNNER_OVERHEAD */
 
-int _tests[2] = { 0, 0 },
 	_asserts[2] = { 0, 0 },
+int _tests[3] = { 0, 0, 0 },
 	_current_line = 0,
 	_current_column = 0;
 char *_current_test = "none",
@@ -135,10 +137,13 @@ int main(int argc, char **argv) {
 			);
 
 	} else {
-		printf(TPASS "OK (%d of %d tests, %d assertions, %d skipped)" TNORM "\n",
-				_tests[RUN],
+		printf("%s: %d tests (%d skipped, %d empty), %d assertions (%d skipped)" TNORM "\n",
+				_tests[RUN] == 0 || _tests[SKIP] || _tests[EMPTY] || _asserts[SKIP]
+					? TWARN "WARN" : TPASS "OK",
 				_tests[RUN] + _tests[SKIP],
-				_asserts[RUN],
+				_tests[SKIP],
+				_tests[EMPTY],
+				_asserts[RUN] + _asserts[SKIP],
 				_asserts[SKIP]
 			);
 	}
