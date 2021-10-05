@@ -42,7 +42,7 @@
  *
  * @constant TEST_RUNNER_VERSION
  */
-#define TEST_RUNNER_VERSION "1.0.0"
+#define TEST_RUNNER_VERSION "1.0.1"
 
 #define TNORM "\x1B[0m"
 #define TPASS "\x1B[2;30;42m"
@@ -66,7 +66,7 @@ int _tests[2] = { 0, 0 },
 	_current_column = 0;
 char *_current_test = "none",
 	*_current_file = "";
-void *_dummy;
+char *(*_dummy)(void);
 
 #define _put_message(message) \
 	do { \
