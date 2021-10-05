@@ -42,7 +42,7 @@
  *
  * @constant TEST_RUNNER_VERSION
  */
-#define TEST_RUNNER_VERSION "1.1.1"
+#define TEST_RUNNER_VERSION "1.1.2"
 
 #define TNORM "\x1B[0m"
 #define TPASS "\x1B[2;30;42m"
@@ -72,8 +72,8 @@ char *(*_dummy)(void);
 
 #define _put_message(message) \
 	do { \
-		printf(message); \
-		if((_current_column += strlen(message)) >= 79) { \
+		printf("%s", message); \
+		if ((_current_column += strlen(message)) >= 79) { \
 			_current_column =  0; \
 			printf("\n"); \
 		} \
