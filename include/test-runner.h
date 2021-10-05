@@ -42,7 +42,7 @@
  *
  * @constant TEST_RUNNER_VERSION
  */
-#define TEST_RUNNER_VERSION "1.1.3"
+#define TEST_RUNNER_VERSION "1.2.0"
 
 #define TNORM "\x1B[0m"
 #define TPASS "\x1B[2;30;42m"
@@ -52,18 +52,19 @@
 #define KOK "."
 #define KFAIL "x"
 #define KSKIP "s"
+#define KINCOMPLETE "i"
 
 #define RUN 0
 #define SKIP 1
+#define INCOMPLETE 2
 #define EMPTY 2
 
 #ifndef TEST_RUNNER_OVERHEAD
 #define setup()
-#define teardown()
 #endif /* TEST_RUNNER_OVERHEAD */
 
 unsigned long _tests[3] = { 0, 0, 0 },
-	_asserts[2] = { 0, 0 },
+	_asserts[3] = { 0, 0, 0 },
 	_current_line = 0,
 	_current_column = 0;
 char *_current_test = "none",
@@ -88,6 +89,14 @@ char *(*_dummy)(void);
 			return message; \
 		} \
 		_put_message(KOK); \
+	} while (0)
+
+#define _mark_incomplete() \
+	do { \
+		_current_line = __LINE__; \
+		_asserts[INCOMPLETE]++; \
+		_put_message(KINCOMPLETE); \
+		return NULL; \
 	} while (0)
 
 #define _run_test(test) \
@@ -142,14 +151,15 @@ int main(int argc, char **argv) {
 			);
 
 	} else {
-		printf("%s: %lu tests (%lu skipped, %lu empty), %lu assertions (%lu skipped)" TNORM "\n",
+		printf("%s: %lu tests (%lu skipped, %lu empty), %lu assertions (%lu skipped, %lu incomplete)" TNORM "\n",
 				_tests[RUN] == 0 || _tests[SKIP] || _tests[EMPTY] || _asserts[SKIP]
 					? TWARN "WARN" : TPASS "OK",
 				_tests[RUN] + _tests[SKIP],
 				_tests[SKIP],
 				_tests[EMPTY],
-				_asserts[RUN] + _asserts[SKIP],
-				_asserts[SKIP]
+				_asserts[RUN] + _asserts[SKIP] + _asserts[INCOMPLETE],
+				_asserts[SKIP],
+				_asserts[INCOMPLETE]
 			);
 	}
 
