@@ -40,5 +40,6 @@ for test in $TESTS
 do
 	echo "${test}"
 	out="$(basename ${test}.out)"
-	$CC $CFLAGS $SOURCES "${test}" -o "${out}" && $RUNNER "./${out}" ; rm "${out}"
+	$CC $CFLAGS $SOURCES "${test}" -o "${out}" && $RUNNER "./${out}"
+	[ -x ] && rm "${out}"
 done
