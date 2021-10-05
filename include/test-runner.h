@@ -23,10 +23,26 @@
 #ifndef TEST_RUNNER_H
 #define TEST_RUNNER_H
 
+/*
+ * # Includes
+ */
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
+
+/*
+ * # Constants
+ */
+/*
+ * The current version of the Test Runner. Version numbering conforms to the
+ * [Symantic Versioning] spec.
+ *
+ * [Symantic Versioning]: http://semver.org/
+ *
+ * @constant TEST_RUNNER_VERSION
+ */
+#define TEST_RUNNER_VERSION "1.0.0"
 
 #define TNORM "\x1B[0m"
 #define TPASS "\x1B[2;30;42m"
