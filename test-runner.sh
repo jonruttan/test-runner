@@ -19,9 +19,9 @@
 SCRIPT="$0"
 CC=${CC:-gcc}
 INCLUDE="$(dirname "$SCRIPT")/include"
-CFLAGS=${CFLAGS:-"-Wall -Wextra -Wno-unused-parameter -fdiagnostics-color=always -g"}
-CFLAGS="${CFLAGS} -DDEBUG -DTESTS -I$INCLUDE"
 RUNNER=
+CFLAGS=${CFLAGS:-"-Wall -Wextra -Wno-unused-parameter"}
+CFLAGS="${CFLAGS} -g -fdiagnostics-color=always -DDEBUG -DTESTS -I$INCLUDE"
 if [ -x "$(which valgrind)" ]; then
 	RUNNER="valgrind --leak-check=full --show-leak-kinds=all"
 fi
