@@ -83,7 +83,7 @@ char *(*_dummy)(void);
 	do { \
 		_current_line = __LINE__; \
 		_asserts[RUN]++; \
-		if(!(test)) { \
+		if ( ! (test)) { \
 			_put_message(KFAIL); \
 			return message; \
 		} \
