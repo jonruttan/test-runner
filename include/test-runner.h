@@ -42,7 +42,7 @@
  *
  * @constant TEST_RUNNER_VERSION
  */
-#define TEST_RUNNER_VERSION "1.1.0"
+#define TEST_RUNNER_VERSION "1.1.1"
 
 #define TNORM "\x1B[0m"
 #define TPASS "\x1B[2;30;42m"
@@ -62,8 +62,8 @@
 #define teardown()
 #endif /* TEST_RUNNER_OVERHEAD */
 
+unsigned long _tests[3] = { 0, 0, 0 },
 	_asserts[2] = { 0, 0 },
-int _tests[3] = { 0, 0, 0 },
 	_current_line = 0,
 	_current_column = 0;
 char *_current_test = "none",
@@ -129,7 +129,7 @@ int main(int argc, char **argv) {
 	printf("\n");
 
 	if (result != 0) {
-		printf(TFAIL "**FAIL**: %s(%s:%d): it should %s" TNORM "\n",
+		printf(TFAIL "**FAIL**: %s(%s:%lu): it should %s" TNORM "\n",
 				_current_test,
 				_current_file,
 				_current_line,
@@ -137,7 +137,7 @@ int main(int argc, char **argv) {
 			);
 
 	} else {
-		printf("%s: %d tests (%d skipped, %d empty), %d assertions (%d skipped)" TNORM "\n",
+		printf("%s: %lu tests (%lu skipped, %lu empty), %lu assertions (%lu skipped)" TNORM "\n",
 				_tests[RUN] == 0 || _tests[SKIP] || _tests[EMPTY] || _asserts[SKIP]
 					? TWARN "WARN" : TPASS "OK",
 				_tests[RUN] + _tests[SKIP],
