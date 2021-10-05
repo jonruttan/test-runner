@@ -42,7 +42,7 @@
  *
  * @constant TEST_RUNNER_VERSION
  */
-#define TEST_RUNNER_VERSION "1.1.2"
+#define TEST_RUNNER_VERSION "1.1.3"
 
 #define TNORM "\x1B[0m"
 #define TPASS "\x1B[2;30;42m"
@@ -92,15 +92,20 @@ char *(*_dummy)(void);
 
 #define _run_test(test) \
 	do { \
-		char *message; \
+		unsigned long _asserts_run = _asserts[RUN]; \
+		char *_message; \
 		_current_file = __FILE__; \
 		_current_test = #test; \
 		setup(); \
-		message = test(); \
+		_message = test(); \
 		teardown(); \
 		_tests[RUN]++; \
-		if (message) \
-			return message; \
+		if (_asserts[RUN] == _asserts_run) { \
+			_tests[EMPTY]++; \
+		} \
+		if (_message) { \
+			return _message; \
+		} \
 	} while (0)
 
 #define _xit_should(message, test) \
