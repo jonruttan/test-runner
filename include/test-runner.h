@@ -1,6 +1,13 @@
 /*
  * # Test Runner in a C header
  *
+ * ## test-runner.h -- Header/Implementation
+ *
+ * @description Test Runner in a C header
+ * @author [Jon Ruttan](jonruttan@gmail.com)
+ * @copyright 2020 Jon Ruttan
+ * @license MIT No Attribution (MIT-0)
+ *
  * Adapted from:
  *   - <https://web.archive.org/web/20140929091701/ryepdx.com/2014/09/tdd-in-c/>
  *   - <http://eradman.com/posts/tdd-in-c.html>
