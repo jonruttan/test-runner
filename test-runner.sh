@@ -1,3 +1,21 @@
+#
+# # Test Runner in a C header
+#
+# ## test-runner.sh -- Shell Script - Runner
+#
+# @description Test Runner in a C header
+# @author [Jon Ruttan](jonruttan@gmail.com)
+# @copyright 2020 Jon Ruttan
+# @license MIT No Attribution (MIT-0)
+#
+# ## Usage
+#
+# ### Run All Tests
+#
+# ```bash
+# sh test-runner.sh
+# ```
+#
 SCRIPT="$0"
 CC=${CC:-gcc}
 INCLUDE="$(dirname "$SCRIPT")/include"
