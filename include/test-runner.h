@@ -60,7 +60,8 @@
 #define EMPTY 2
 
 #ifndef TEST_RUNNER_OVERHEAD
-#define setup()
+static void setup(void);
+static void teardown(void);
 #endif /* TEST_RUNNER_OVERHEAD */
 
 unsigned long _tests[3] = { 0, 0, 0 },
