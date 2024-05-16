@@ -127,11 +127,7 @@ A minimalist, portable unit testing framework for C.
    Or manually:
 
    ```console
-   $ for test in tests/*-test.c; do
-      echo $test; \
-      gcc -Wall -fdiagnostics-color=always -DTESTS -Itest-runner/include $test && ./a.out; \
-      rm a.out; \
-   done
+   $ for test in tests/*-test.c; do echo $test; gcc -Itest-runner/include $test && ./a.out; rm a.out; done
    tests/add-integers-test.c
    .s.ie
    WARN: 4 tests (1 incomplete, 1 empty, 1 skipped), 3 assertions (1 skipped)
