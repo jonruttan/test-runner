@@ -53,6 +53,7 @@
 #define KFAIL "x"
 #define KSKIP "s"
 #define KINCOMPLETE "i"
+#define KEMPTY "e"
 
 #define RUN 0
 #define SKIP 1
@@ -112,6 +113,7 @@ char *(*_dummy)(void);
 		_tests[RUN]++; \
 		if (_asserts[RUN] == _asserts_run) { \
 			_tests[EMPTY]++; \
+			_put_message(KEMPTY); \
 		} \
 		if (_message) { \
 			return _message; \
