@@ -45,8 +45,8 @@
 #define TEST_RUNNER_VERSION "1.2.0"
 
 #define TNORM "\x1B[0m"
-#define TPASS "\x1B[2;30;42m"
-#define TWARN "\x1B[2;30;43m"
+#define TPASS "\x1B[1;30;42m"
+#define TWARN "\x1B[1;30;103m"
 #define TFAIL "\x1B[1;37;41m"
 
 #define KOK "."
