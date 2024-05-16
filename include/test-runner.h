@@ -42,7 +42,7 @@
  *
  * @constant TEST_RUNNER_VERSION
  */
-#define TEST_RUNNER_VERSION "1.3.0"
+#define TEST_RUNNER_VERSION "1.3.1"
 
 #define TNORM "\x1B[0m"
 #define TPASS "\x1B[1;30;42m"
