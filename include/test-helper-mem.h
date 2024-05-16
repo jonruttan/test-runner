@@ -4,7 +4,7 @@
 #include "test-runner.h"
 #include <string.h>
 
-#define FREE_CHAR 0x55
+#define FREE_CHAR 0xFC
 
 #define BUFFERS 1024
 #define ALLOC_SIZE 4096
