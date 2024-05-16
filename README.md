@@ -117,6 +117,8 @@ A minimalist, portable unit testing framework for C.
 
 4. **Run the tests:**
 
+   Using the shell script:
+
    ```console
    $ sh test-runner/test-runner.sh tests
    tests/add-integers-test.c
