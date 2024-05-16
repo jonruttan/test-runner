@@ -82,20 +82,35 @@ A minimalist, portable unit testing framework for C.
    static char *test_add_integers(void)
    {
       _it_should("add two integers", 3 == add_integers(1, 2));
-      _xit_should("skip this assertion", 3 == add_integers(1, 1));
+      _xit_should("skip this test", 3 == add_integers(1, 1));
+      return NULL;
+   }
+
+   static char *test_incomplete(void)
+   {
+      _it_should("add two integers", 5 == add_integers(2, 3));
+      _mark_incomplete();
       return NULL;
    }
 
    static char *test_skip(void)
    {
-      _it_should("skip this test", 3 == add_integers(2, 2));
+      _it_should("skip all assertions in this test", 3 == add_integers(2, 2));
+      return NULL;
+   }
+
+   static char *test_empty(void)
+   {
+      /* The lack of assertions in this test will be reported. */
       return NULL;
    }
 
    static char *run_tests()
    {
       _run_test(test_add_integers);
+      _run_test(test_incomplete);
       _xrun_test(test_skip);
+      _run_test(test_empty);
       return NULL;
    }
    ```
@@ -105,21 +120,21 @@ A minimalist, portable unit testing framework for C.
    ```console
    $ sh test-runner/test-runner.sh tests
    tests/add-integers-test.c
-   .s
-   WARN: 2 tests (1 skipped, 0 empty), 2 assertions (1 skipped, 0 incomplete)
+   .s.ie
+   WARN: 4 tests (1 skipped, 1 empty), 4 assertions (1 skipped, 1 incomplete)
    ```
 
    Or manually:
 
    ```console
    $ for test in tests/*-test.c; do
-      echo $test
-      gcc -Wall -fdiagnostics-color=always -DTESTS -Itest-runner/include $test && ./a.out
-      rm a.out
+      echo $test; \
+      gcc -Wall -fdiagnostics-color=always -DTESTS -Itest-runner/include $test && ./a.out; \
+      rm a.out; \
    done
    tests/add-integers-test.c
-   .s
-   WARN: 2 tests (1 skipped, 0 empty), 2 assertions (1 skipped, 0 incomplete)
+   .s.ie
+   WARN: 4 tests (1 skipped, 1 empty), 4 assertions (1 skipped, 1 incomplete)
    ```
 
 ## Roadmap
