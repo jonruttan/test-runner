@@ -14,6 +14,7 @@ typedef void *(*helper_realloc_fn)(void *, size_t);
 typedef void (*helper_free_fn)(void *);
 
 unsigned char _alloc_buffer[BUFFERS][ALLOC_SIZE];
+void *_alloc_ptrs[BUFFERS];
 int _buffer_index = -1,
 	_buffer_alloc_count = 0,
 	_buffer_realloc_count = 0,
@@ -30,7 +31,7 @@ void *helper_alloc_guaranteed(size_t nmemb, size_t size)
 	_buffer_alloc_count++;
 	memset(_alloc_buffer[_buffer_index], 0, nmemb * size);
 	memset(_alloc_buffer[_buffer_index] + (nmemb * size), FREE_CHAR, ALLOC_SIZE - (nmemb * size));
-	return _alloc_buffer[_buffer_index];
+	return (_alloc_ptrs[_buffer_index] = _alloc_buffer[_buffer_index]);
 }
 void *helper_malloc_guaranteed(size_t size)
 {
@@ -40,17 +41,27 @@ void *helper_malloc_guaranteed(size_t size)
 void *helper_realloc_guaranteed(void *ptr, size_t size)
 {
 	int src = _buffer_index;
-	int dst = _buffer_index++;
+	int dst = ++_buffer_index;
 	_buffer_realloc_count++;
 	memcpy(_alloc_buffer[dst], _alloc_buffer[src], size);
 	memset(_alloc_buffer[dst] + size, FREE_CHAR, ALLOC_SIZE - size);
-	return _alloc_buffer[_buffer_index = dst];
+	return (_alloc_ptrs[_buffer_index] = _alloc_buffer[_buffer_index]);
 }
 
 void helper_free_guaranteed(void *ptr)
 {
-	memset(_alloc_buffer[_buffer_index], FREE_CHAR, ALLOC_SIZE);
-	_buffer_free_count++;
+	int i;
+
+	for (i=_buffer_index; i; i--) {
+		if (_alloc_ptrs[i] == ptr) {
+			break;
+		}
+	}
+
+	if (i >= 0) {
+		memset(_alloc_buffer[i], FREE_CHAR, ALLOC_SIZE);
+		_buffer_free_count++;
+	}
 }
 
 void *helper_alloc_null(size_t nmemb, size_t size)
@@ -82,6 +93,24 @@ void *helper_realloc_hardcoded(void *ptr, size_t size)
 	return (void *)0xfacaded;
 }
 
+void *helper_alloc_system(size_t nmemb, size_t size)
+{
+	_buffer_alloc_count++;
+	return calloc(nmemb, size);
+}
+
+void *helper_realloc_system(void *ptr, size_t size)
+{
+	_buffer_realloc_count++;
+	return realloc(ptr, size);
+}
+
+void helper_free_system(void *ptr)
+{
+	_buffer_free_count++;
+	free(ptr);
+}
+
 void helper_set_alloc(int type)
 {
 	switch(type) {
@@ -105,9 +134,9 @@ void helper_set_alloc(int type)
 
 	case MEM_SYSTEM:
 	default:
-		helper_alloc = calloc;
-		helper_realloc = realloc;
-		helper_free = free;
+		helper_alloc = helper_alloc_system;
+		helper_realloc = helper_realloc_system;
+		helper_free = helper_free_system;
 		break;
 	}
 }
