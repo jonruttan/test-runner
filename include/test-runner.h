@@ -124,6 +124,8 @@ char *(*_dummy)(void);
 		_put_message(KSKIP); \
 	} while (0)
 
+#define _xmark_incomplete() {}
+
 #define _xrun_test(test) \
 	do { \
 		_current_file = __FILE__; \
