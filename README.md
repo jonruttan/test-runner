@@ -36,7 +36,7 @@ A minimalist, portable unit testing framework for C.
    $ sh test-runner/test-runner.sh tests
    tests/add-integers-test.c
    .
-   OK: 1 tests (0 skipped, 0 empty), 1 assertions (0 skipped, 0 incomplete)
+   OK: 1 tests (0 incomplete, 0 empty, 0 skipped), 1 assertions (0 skipped)
    ```
 
 ## Usage
@@ -121,7 +121,7 @@ A minimalist, portable unit testing framework for C.
    $ sh test-runner/test-runner.sh tests
    tests/add-integers-test.c
    .s.ie
-   WARN: 4 tests (1 skipped, 1 empty), 4 assertions (1 skipped, 1 incomplete)
+   WARN: 4 tests (1 incomplete, 1 empty, 1 skipped), 3 assertions (1 skipped)
    ```
 
    Or manually:
@@ -134,7 +134,7 @@ A minimalist, portable unit testing framework for C.
    done
    tests/add-integers-test.c
    .s.ie
-   WARN: 4 tests (1 skipped, 1 empty), 4 assertions (1 skipped, 1 incomplete)
+   WARN: 4 tests (1 incomplete, 1 empty, 1 skipped), 3 assertions (1 skipped)
    ```
 
 ## Roadmap
