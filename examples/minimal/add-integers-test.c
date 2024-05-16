@@ -6,7 +6,7 @@ static void teardown(void) {};
 
 static char *test_add_integers(void)
 {
-	_it_should("add two zero integers", add_integers(1, 2) == 3);
+	_it_should("add two zero integers", 3 == add_integers(1, 2));
 
 	return NULL;
 }
