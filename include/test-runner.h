@@ -58,15 +58,15 @@
 #define RUN 0
 #define SKIP 1
 #define INCOMPLETE 2
-#define EMPTY 2
+#define EMPTY 3
 
 #ifndef TEST_RUNNER_OVERHEAD
 static void setup(void);
 static void teardown(void);
 #endif /* TEST_RUNNER_OVERHEAD */
 
-unsigned long _tests[3] = { 0, 0, 0 },
-	_asserts[3] = { 0, 0, 0 },
+unsigned long _tests[4] = { 0, 0, 0, 0 },
+	_asserts[3] = { 0, 0 },
 	_current_line = 0,
 	_current_column = 0;
 char *_current_test = "none",
@@ -96,7 +96,7 @@ char *(*_dummy)(void);
 #define _mark_incomplete() \
 	do { \
 		_current_line = __LINE__; \
-		_asserts[INCOMPLETE]++; \
+		_tests[INCOMPLETE]++; \
 		_put_message(KINCOMPLETE); \
 		return NULL; \
 	} while (0)
@@ -156,15 +156,15 @@ int main(int argc, char **argv) {
 			);
 
 	} else {
-		printf("%s: %lu tests (%lu skipped, %lu empty), %lu assertions (%lu skipped, %lu incomplete)" TNORM "\n",
-				_tests[RUN] == 0 || _tests[SKIP] || _tests[EMPTY] || _asserts[SKIP]
+		printf("%s: %lu tests (%lu incomplete, %lu empty, %lu skipped), %lu assertions (%lu skipped)" TNORM "\n",
+				_tests[RUN] == 0 || _tests[INCOMPLETE] || _tests[EMPTY] || _tests[SKIP] || _asserts[SKIP]
 					? TWARN "WARN" : TPASS "OK",
 				_tests[RUN] + _tests[SKIP],
-				_tests[SKIP],
+				_tests[INCOMPLETE],
 				_tests[EMPTY],
+				_tests[SKIP],
 				_asserts[RUN] + _asserts[SKIP] + _asserts[INCOMPLETE],
-				_asserts[SKIP],
-				_asserts[INCOMPLETE]
+				_asserts[SKIP]
 			);
 	}
 
