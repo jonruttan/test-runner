@@ -33,8 +33,14 @@ if [ -d "$TESTS" ]; then
 	TESTS="$TESTS/*-test.c"
 fi
 
+# Determine correct `stat` formatting parameters
+# Use GNU stat formatting
+STAT="stat -c '%Y %n'"
+# Try to stat this file, on error use *BSD formatting
+eval $STAT "$0" 1>/dev/null 2>/dev/null || STAT="stat -f '%m %N'"
+
 # Sort by Modified date
-TESTS=$(stat -c '%Y %n' $TESTS | sort -t ' ' -nk1 | cut -d ' ' -f2-)
+TESTS=$(eval $STAT $TESTS | sort -t ' ' -nk1 | cut -d ' ' -f2-)
 
 for test in $TESTS
 do
