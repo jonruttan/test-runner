@@ -146,8 +146,9 @@ static char *run_tests();
 
 int main(int argc, char **argv) {
 	char *result;
+	time_t start = time(NULL);
 
-	srand(time(NULL));
+	srand(start);
 
 	result = run_tests();
 	printf("\n");
@@ -161,7 +162,7 @@ int main(int argc, char **argv) {
 			);
 
 	} else {
-		printf("%s: %lu tests (%lu incomplete, %lu empty, %lu skipped), %lu assertions (%lu skipped)" _TNORM "\n",
+		printf("%s: %lu tests (%lu incomplete, %lu empty, %lu skipped), %lu assertions (%lu skipped), %lu sec." _TNORM "\n",
 				_tests[_RUN] == 0 || _tests[_INCOMPLETE] || _tests[_EMPTY] || _tests[_SKIP] || _asserts[_SKIP]
 					? _TWARN "WARN" : _TPASS "OK",
 				_tests[_RUN] + _tests[_SKIP],
@@ -169,7 +170,8 @@ int main(int argc, char **argv) {
 				_tests[_EMPTY],
 				_tests[_SKIP],
 				_asserts[_RUN] + _asserts[_SKIP],
-				_asserts[_SKIP]
+				_asserts[_SKIP],
+				time(NULL) - start
 			);
 	}
 
