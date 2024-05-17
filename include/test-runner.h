@@ -17,7 +17,7 @@
  * ### Run All Tests
  *
  * ```bash
- * for test in *-test.c; do echo $test; gcc -Wall -fdiagnostics-color=always -DTESTS -o"$test".out "$test" && ./"$test".out; rm "$test".out; done
+ * for test in *-test.c; do echo $test; cc -Wall -fdiagnostics-color=always -DTESTS -o"$test".out "$test" && ./"$test".out; rm "$test".out; done
  * ```
  */
 #ifndef TEST_RUNNER_H
