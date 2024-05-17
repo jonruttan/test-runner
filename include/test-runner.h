@@ -60,9 +60,14 @@
 #define INCOMPLETE 2
 #define EMPTY 3
 
-#ifndef TEST_RUNNER_OVERHEAD
-static void setup(void);
-static void teardown(void);
+#ifdef TEST_RUNNER_OVERHEAD
+static void _setup(void);
+static void _teardown(void);
+#define _SETUP() _setup();
+#define _TEARDOWN() _teardown();
+#else
+#define _SETUP()
+#define _TEARDOWN()
 #endif /* TEST_RUNNER_OVERHEAD */
 
 unsigned long _tests[4] = { 0, 0, 0, 0 },
@@ -107,13 +112,13 @@ char *(*_dummy)(void);
 		char *_message; \
 		_current_file = __FILE__; \
 		_current_test = #test; \
-		setup(); \
+		_SETUP() \
 		_message = test(); \
-		teardown(); \
 		_tests[RUN]++; \
 		if (_asserts[RUN] == _asserts_run) { \
 			_tests[EMPTY]++; \
 			_put_message(KEMPTY); \
+		_TEARDOWN() \
 		} \
 		if (_message) { \
 			return _message; \

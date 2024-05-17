@@ -76,9 +76,6 @@ A minimalist, portable unit testing framework for C.
    #include "test-runner.h"
    #include "../src/add-integers.c"
 
-   static void setup(void) {};
-   static void teardown(void) {};
-
    static char *test_add_integers(void)
    {
       _it_should("add two integers", 3 == add_integers(1, 2));
