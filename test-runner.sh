@@ -17,7 +17,7 @@
 # ```
 #
 SCRIPT="$0"
-CC=${CC:-gcc}
+CC=${CC:-cc}
 INCLUDE="$(dirname "$SCRIPT")/include"
 CFLAGS=${CFLAGS:-"-Wall -Wextra -Wno-unused-parameter"}
 CFLAGS="${CFLAGS} -g -fdiagnostics-color=always -DDEBUG -DTESTS -I$INCLUDE"
