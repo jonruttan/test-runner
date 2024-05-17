@@ -42,7 +42,7 @@
  *
  * @constant TEST_RUNNER_VERSION
  */
-#define TEST_RUNNER_VERSION "1.4.0"
+#define TEST_RUNNER_VERSION "1.4.1"
 
 #define _TNORM "\x1B[0m"
 #define _TPASS "\x1B[1;30;42m"
@@ -168,7 +168,7 @@ int main(int argc, char **argv) {
 				_tests[_INCOMPLETE],
 				_tests[_EMPTY],
 				_tests[_SKIP],
-				_asserts[_RUN] + _asserts[_SKIP] + _asserts[_INCOMPLETE],
+				_asserts[_RUN] + _asserts[_SKIP],
 				_asserts[_SKIP]
 			);
 	}
