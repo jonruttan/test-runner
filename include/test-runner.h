@@ -44,21 +44,21 @@
  */
 #define TEST_RUNNER_VERSION "1.3.1"
 
-#define TNORM "\x1B[0m"
-#define TPASS "\x1B[1;30;42m"
-#define TWARN "\x1B[1;30;103m"
-#define TFAIL "\x1B[1;37;41m"
+#define _TNORM "\x1B[0m"
+#define _TPASS "\x1B[1;30;42m"
+#define _TWARN "\x1B[1;30;103m"
+#define _TFAIL "\x1B[1;37;41m"
 
-#define KOK "."
-#define KFAIL "x"
-#define KSKIP "s"
-#define KINCOMPLETE "i"
-#define KEMPTY "e"
+#define _KOK "."
+#define _KFAIL "x"
+#define _KSKIP "s"
+#define _KINCOMPLETE "i"
+#define _KEMPTY "e"
 
-#define RUN 0
-#define SKIP 1
-#define INCOMPLETE 2
-#define EMPTY 3
+#define _RUN 0
+#define _SKIP 1
+#define _INCOMPLETE 2
+#define _EMPTY 3
 
 #ifdef TEST_RUNNER_OVERHEAD
 static void _setup(void);
@@ -90,35 +90,35 @@ char *(*_dummy)(void);
 #define _it_should(message, test) \
 	do { \
 		_current_line = __LINE__; \
-		_asserts[RUN]++; \
+		_asserts[_RUN]++; \
 		if ( ! (test)) { \
-			_put_message(KFAIL); \
+			_put_message(_KFAIL); \
 			return message; \
 		} \
-		_put_message(KOK); \
+		_put_message(_KOK); \
 	} while (0)
 
 #define _mark_incomplete() \
 	do { \
 		_current_line = __LINE__; \
-		_tests[INCOMPLETE]++; \
-		_put_message(KINCOMPLETE); \
+		_tests[_INCOMPLETE]++; \
+		_put_message(_KINCOMPLETE); \
 		return NULL; \
 	} while (0)
 
 #define _run_test(test) \
 	do { \
-		unsigned long _asserts_run = _asserts[RUN]; \
+		unsigned long _asserts_run = _asserts[_RUN]; \
 		char *_message; \
 		_current_file = __FILE__; \
 		_current_test = #test; \
 		_SETUP() \
 		_message = test(); \
-		_tests[RUN]++; \
-		if (_asserts[RUN] == _asserts_run) { \
-			_tests[EMPTY]++; \
-			_put_message(KEMPTY); \
 		_TEARDOWN() \
+		_tests[_RUN]++; \
+		if (_asserts[_RUN] == _asserts_run) { \
+			_tests[_EMPTY]++; \
+			_put_message(_KEMPTY); \
 		} \
 		if (_message) { \
 			return _message; \
@@ -128,8 +128,8 @@ char *(*_dummy)(void);
 #define _xit_should(message, test) \
 	do { \
 		_current_line = __LINE__; \
-		_asserts[SKIP]++; \
-		_put_message(KSKIP); \
+		_asserts[_SKIP]++; \
+		_put_message(_KSKIP); \
 	} while (0)
 
 #define _xmark_incomplete() {}
@@ -138,7 +138,7 @@ char *(*_dummy)(void);
 	do { \
 		_current_file = __FILE__; \
 		_current_test = #test; \
-		_tests[SKIP]++; \
+		_tests[_SKIP]++; \
 		_dummy = test; \
 	} while (0)
 
@@ -153,7 +153,7 @@ int main(int argc, char **argv) {
 	printf("\n");
 
 	if (result != 0) {
-		printf(TFAIL "**FAIL**: %s(%s:%lu): it should %s" TNORM "\n",
+		printf(_TFAIL "**FAIL**: %s(%s:%lu): it should %s" _TNORM "\n",
 				_current_test,
 				_current_file,
 				_current_line,
@@ -161,15 +161,15 @@ int main(int argc, char **argv) {
 			);
 
 	} else {
-		printf("%s: %lu tests (%lu incomplete, %lu empty, %lu skipped), %lu assertions (%lu skipped)" TNORM "\n",
-				_tests[RUN] == 0 || _tests[INCOMPLETE] || _tests[EMPTY] || _tests[SKIP] || _asserts[SKIP]
-					? TWARN "WARN" : TPASS "OK",
-				_tests[RUN] + _tests[SKIP],
-				_tests[INCOMPLETE],
-				_tests[EMPTY],
-				_tests[SKIP],
-				_asserts[RUN] + _asserts[SKIP] + _asserts[INCOMPLETE],
-				_asserts[SKIP]
+		printf("%s: %lu tests (%lu incomplete, %lu empty, %lu skipped), %lu assertions (%lu skipped)" _TNORM "\n",
+				_tests[_RUN] == 0 || _tests[_INCOMPLETE] || _tests[_EMPTY] || _tests[_SKIP] || _asserts[_SKIP]
+					? _TWARN "WARN" : _TPASS "OK",
+				_tests[_RUN] + _tests[_SKIP],
+				_tests[_INCOMPLETE],
+				_tests[_EMPTY],
+				_tests[_SKIP],
+				_asserts[_RUN] + _asserts[_SKIP] + _asserts[_INCOMPLETE],
+				_asserts[_SKIP]
 			);
 	}
 
