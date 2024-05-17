@@ -1,10 +1,10 @@
 # test-runner
 
-A minimalist, portable unit testing framework for C.
+A lightweight and portable unit testing framework for C.
 
 ## About The Project
 
-`test-runner` is designed to be a lightweight and portable unit testing framework for C. It consists of a single C header file and relies on minimal standard C library functions.
+`test-runner` is designed to be a lightweight and portable unit testing framework for C. It consists of a single C header file, relies on minimal standard C library functions, and complies with all C standards.
 
 ## Getting Started
 
