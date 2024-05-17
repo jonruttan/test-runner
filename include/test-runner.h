@@ -71,7 +71,7 @@ static void _teardown(void);
 #endif /* TEST_RUNNER_OVERHEAD */
 
 unsigned long _tests[4] = { 0, 0, 0, 0 },
-	_asserts[3] = { 0, 0 },
+	_asserts[2] = { 0, 0 },
 	_current_line = 0,
 	_current_column = 0;
 char *_current_test = "none",
