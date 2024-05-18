@@ -144,7 +144,13 @@ char *(*_dummy)(void);
 
 static char *run_tests();
 
-int main(int argc, char **argv) {
+#define UNUSED(x) (void)(x)
+
+int main(int argc, char *argv[], char *env[]) {
+	UNUSED(argc);
+	UNUSED(argv);
+	UNUSED(env);
+
 	char *result;
 	time_t start = time(NULL);
 
