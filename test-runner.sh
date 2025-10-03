@@ -26,7 +26,7 @@ if [ -x "$(which valgrind)" ]; then
 fi
 RUNNER=${RUNNER:-${VALGRIND}}
 
-TESTS="$@"
+TESTS="${@:-tests}"
 
 # If $TESTS is a directory search it for tests
 if [ -d "$TESTS" ]; then
