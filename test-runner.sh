@@ -22,7 +22,7 @@ INCLUDE="$(dirname "$SCRIPT")/include"
 CFLAGS=${CFLAGS:-"-Wall -Wextra -Wno-unused-parameter"}
 CFLAGS="${CFLAGS} -g -fdiagnostics-color=always -DDEBUG -DTESTS -I$INCLUDE"
 if [ -x "$(which valgrind)" ]; then
-	VALGRIND="valgrind --quiet --show-error-list=yes --leak-check=full --show-leak-kinds=all"
+	VALGRIND="valgrind --quiet --leak-check=full --show-leak-kinds=all"
 fi
 RUNNER=${RUNNER:-${VALGRIND}}
 
@@ -42,10 +42,13 @@ eval $STAT "$0" 1>/dev/null 2>/dev/null || STAT="stat -f '%m %N'"
 # Sort by Modified date
 TESTS=$(eval $STAT $TESTS | sort -t ' ' -nk1 | cut -d ' ' -f2-)
 
+[ -d tmp ] || mkdir tmp
+
 for test in $TESTS
 do
 	echo "${test}"
-	out="$(basename ${test}.out)"
+	out="tmp/$(basename ${test}.out)"
 	$CC $CFLAGS $SOURCES "${test}" -o "${out}" && $RUNNER "./${out}"
-	[ -x ] && rm "${out}"
+	[ -x "${out}" ] && rm "${out}"
+	[ -d "${out}.dSYM" ] && rm -Rf "${out}.dSYM"
 done
