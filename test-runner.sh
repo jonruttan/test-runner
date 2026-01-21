@@ -30,8 +30,19 @@ TESTS="${@:-tests}"
 
 # If $TESTS is a directory search it for tests
 if [ -d "$TESTS" ]; then
-	TESTS="$TESTS/*-test.c"
+	TESTS="$TESTS/*.spec.c"
 fi
+
+OUTDIR="$(mktemp -d 2>/dev/null)" || OUTDIR="$(mktemp -d -t test-runner 2>/dev/null)" || {
+	echo "ERROR: mktemp -d failed" >&2
+	exit 1
+}
+
+cleanup() {
+	[ -n "${OUTDIR:-}" ] && [ -d "${OUTDIR:-}" ] && rm -rf -- "$OUTDIR"
+}
+
+trap cleanup EXIT HUP INT TERM
 
 # Determine correct `stat` formatting parameters
 # Use GNU stat formatting
@@ -42,13 +53,14 @@ eval $STAT "$0" 1>/dev/null 2>/dev/null || STAT="stat -f '%m %N'"
 # Sort by Modified date
 TESTS=$(eval $STAT $TESTS | sort -t ' ' -nk1 | cut -d ' ' -f2-)
 
-[ -d tmp ] || mkdir tmp
+cmd=${RUNNER%% *}
+[ -z "${RUNNER:-}" ] || command -v "$cmd" >/dev/null 2>&1 || RUNNER=
 
 for test in $TESTS
 do
 	echo "${test}"
-	out="tmp/$(basename ${test}.out)"
-	$CC $CFLAGS $SOURCES "${test}" -o "${out}" && $RUNNER "./${out}"
+	out="$OUTDIR/$(basename ${test}.out)"
+	$CC $CFLAGS $SOURCES "${test}" -o "${out}" && $RUNNER "${out}"
 	[ -x "${out}" ] && rm "${out}"
 	[ -d "${out}.dSYM" ] && rm -Rf "${out}.dSYM"
 done
