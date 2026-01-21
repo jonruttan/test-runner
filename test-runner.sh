@@ -10,7 +10,7 @@
 #
 # ## Usage
 #
-# ### Run All Tests	
+# ### Run All Tests
 #
 # ```bash
 # sh test-runner.sh
