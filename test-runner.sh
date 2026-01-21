@@ -10,7 +10,7 @@
 #
 # ## Usage
 #
-# ### Run All Tests
+# ### Run All Tests	
 #
 # ```bash
 # sh test-runner.sh
@@ -24,7 +24,7 @@ CFLAGS="${CFLAGS} -g -fdiagnostics-color=always -DDEBUG -DTESTS -I$INCLUDE"
 if [ -x "$(which valgrind)" ]; then
 	VALGRIND="valgrind --quiet --leak-check=full --show-leak-kinds=all"
 fi
-RUNNER=${RUNNER:-${VALGRIND}}
+WRAPPER=${WRAPPER:-${VALGRIND}}
 
 TESTS="${@:-tests}"
 
@@ -53,14 +53,14 @@ eval $STAT "$0" 1>/dev/null 2>/dev/null || STAT="stat -f '%m %N'"
 # Sort by Modified date
 TESTS=$(eval $STAT $TESTS | sort -t ' ' -nk1 | cut -d ' ' -f2-)
 
-cmd=${RUNNER%% *}
-[ -z "${RUNNER:-}" ] || command -v "$cmd" >/dev/null 2>&1 || RUNNER=
+cmd=${WRAPPER%% *}
+[ -z "${WRAPPER:-}" ] || command -v "$cmd" >/dev/null 2>&1 || WRAPPER=
 
 for test in $TESTS
 do
 	echo "${test}"
 	out="$OUTDIR/$(basename ${test}.out)"
-	$CC $CFLAGS $SOURCES "${test}" -o "${out}" && $RUNNER "${out}"
+	$CC $CFLAGS $SOURCES "${test}" -o "${out}" && $WRAPPER "${out}"
 	[ -x "${out}" ] && rm "${out}"
 	[ -d "${out}.dSYM" ] && rm -Rf "${out}.dSYM"
 done
