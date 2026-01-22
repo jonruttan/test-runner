@@ -159,7 +159,7 @@ int main(int argc, char *argv[], char *env[]) {
 	result = run_tests();
 	printf("\n");
 
-	if (result != 0) {
+	if (result != NULL) {
 		printf(_TFAIL "**FAIL**: %s(%s:%lu): it should %s" _TNORM "\n",
 				_current_test,
 				_current_file,
