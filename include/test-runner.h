@@ -167,21 +167,22 @@ int main(int argc, char *argv[], char *env[]) {
 				result
 			);
 
-	} else {
-		printf("%s: %lu tests (%lu incomplete, %lu empty, %lu skipped), %lu assertions (%lu skipped), %lu sec." _TNORM "\n",
-				_tests[_RUN] == 0 || _tests[_INCOMPLETE] || _tests[_EMPTY] || _tests[_SKIP] || _asserts[_SKIP]
-					? _TWARN "WARN" : _TPASS "OK",
-				_tests[_RUN] + _tests[_SKIP],
-				_tests[_INCOMPLETE],
-				_tests[_EMPTY],
-				_tests[_SKIP],
-				_asserts[_RUN] + _asserts[_SKIP],
-				_asserts[_SKIP],
-				time(NULL) - start
-			);
+		return EXIT_FAILURE;
 	}
 
-	return 0;
+	printf("%s: %lu tests (%lu incomplete, %lu empty, %lu skipped), %lu assertions (%lu skipped), %lu sec." _TNORM "\n",
+			_tests[_RUN] == 0 || _tests[_INCOMPLETE] || _tests[_EMPTY] || _tests[_SKIP] || _asserts[_SKIP]
+				? _TWARN "WARN" : _TPASS "OK",
+			_tests[_RUN] + _tests[_SKIP],
+			_tests[_INCOMPLETE],
+			_tests[_EMPTY],
+			_tests[_SKIP],
+			_asserts[_RUN] + _asserts[_SKIP],
+			_asserts[_SKIP],
+			time(NULL) - start
+		);
+
+	return EXIT_SUCCESS;
 }
 
 #endif /* TEST_RUNNER_H */
