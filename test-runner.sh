@@ -1,3 +1,5 @@
+#!/usr/bin/env sh
+
 #
 # # Test Runner in a C header
 #
@@ -56,11 +58,15 @@ TESTS=$(eval $STAT $TESTS | sort -t ' ' -nk1 | cut -d ' ' -f2-)
 cmd=${WRAPPER%% *}
 [ -z "${WRAPPER:-}" ] || command -v "$cmd" >/dev/null 2>&1 || WRAPPER=
 
+rc=0
+
 for test in $TESTS
 do
 	echo "${test}"
 	out="$OUTDIR/$(basename ${test}.out)"
-	$CC $CFLAGS $SOURCES "${test}" -o "${out}" && $WRAPPER "${out}"
+	$CC $CFLAGS $SOURCES "${test}" -o "${out}" && $WRAPPER "${out}" || rc=1
 	[ -x "${out}" ] && rm "${out}"
 	[ -d "${out}.dSYM" ] && rm -Rf "${out}.dSYM"
 done
+
+exit "$rc"
