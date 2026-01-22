@@ -146,10 +146,9 @@ static char *run_tests();
 
 #define UNUSED(x) (void)(x)
 
-int main(int argc, char *argv[], char *env[]) {
+int main(int argc, char *argv[]) {
 	UNUSED(argc);
 	UNUSED(argv);
-	UNUSED(env);
 
 	char *result;
 	time_t start = time(NULL);
