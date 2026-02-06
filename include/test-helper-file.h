@@ -1,6 +1,10 @@
 #ifndef TEST_HELPER_FILE_H
 #define TEST_HELPER_FILE_H
 
+#include <stddef.h>   /* NULL, size_t */
+#include <string.h>   /* memcpy */
+#include <sys/types.h> /* ssize_t */
+
 #define TEST_HELPER_FILE_DESCRIPTORS 8
 
 #define TEST_HELPER_FILE_READ 0

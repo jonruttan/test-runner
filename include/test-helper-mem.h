@@ -2,7 +2,8 @@
 #define TEST_HELPER_MEM_H
 
 #include "test-runner.h"
-#include <string.h>
+#include <stdlib.h> /* calloc, realloc, free */
+#include <string.h> /* memset, memcpy */
 
 #define FREE_CHAR 0xFC
 
