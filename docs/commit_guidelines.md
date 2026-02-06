@@ -62,15 +62,11 @@ Use one of the following types (extend only if your project truly needs it):
 
 - feat: new feature (user-facing behavior)
 - fix: bug fix (user-facing behavior)
-- docs: documentation-only change
-- style: formatting only (whitespace, linting, no behavior change)
 - refactor: code change that is neither feature nor fix
-- perf: performance improvement
+- style: formatting only (whitespace, linting, no behavior change)
+- docs: documentation-only change
 - test: add or update tests
-- build: build system, tooling, dependency changes
-- ci: CI configuration/scripts changes
-- chore: maintenance tasks that don’t fit above
-- revert: revert a prior commit
+- build: build system, tooling, dependency changes, and maintenance tasks
 
 If you generate release notes automatically, commonly only `feat` and `fix` are
 included—document that in your release process if applicable.
