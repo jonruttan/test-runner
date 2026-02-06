@@ -34,3 +34,32 @@ jobs:
         run: |
           set -eu
           sh ./test-runner.sh examples/minimal/add-integers-test.c
+
+  coverage:
+    name: coverage (ubuntu)
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install gcovr
+        run: |
+          set -eu
+          python3 -m pip install --user gcovr
+
+      - name: Run With Coverage
+        env:
+          CFLAGS: -std=c11 -Wall -Wextra -Wno-unused-parameter -O0 -g --coverage
+        run: |
+          set -eu
+          mkdir -p .coverage
+          for t in tests/*.spec.c; do
+            out=".coverage/$(basename "$t" .c).out"
+            cc $CFLAGS -Iinclude "$t" -o "$out"
+            "$out"
+          done
+
+      - name: Coverage Summary
+        run: |
+          set -eu
+          "$HOME/.local/bin/gcovr" -r . --filter 'include/' --print-summary
