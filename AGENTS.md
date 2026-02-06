@@ -25,3 +25,6 @@ Project-specific instructions for AI agents working in this repository.
 - Keep diffs focused on the requested work.
 - If unrelated modifications are present, do not revert them automatically; call them out.
 
+## Commits
+
+If asked to create commits, follow `docs/commit_guidelines.md`.
