@@ -35,21 +35,12 @@ if [ -d "$TESTS" ]; then
 	TESTS="$TESTS/*.spec.c"
 fi
 
-if [ -z "${OUTDIR:-}" ]; then
-	OUTDIR="$(mktemp -d 2>/dev/null)" || OUTDIR="$(mktemp -d -t test-runner 2>/dev/null)" || {
-		echo "ERROR: mktemp -d failed" >&2
-		exit 1
-	}
-else
-	mkdir -p -- "$OUTDIR" || {
-		echo "ERROR: could not create OUTDIR=$OUTDIR" >&2
-		exit 1
-	}
-fi
+OUTDIR="$(mktemp -d 2>/dev/null)" || OUTDIR="$(mktemp -d -t test-runner 2>/dev/null)" || {
+	echo "ERROR: mktemp -d failed" >&2
+	exit 1
+}
 
 cleanup() {
-	# For coverage/debugging, allow callers to keep compiled outputs.
-	[ -n "${KEEP_OUTDIR:-}" ] && return 0
 	[ -n "${OUTDIR:-}" ] && [ -d "${OUTDIR:-}" ] && rm -rf -- "$OUTDIR"
 }
 

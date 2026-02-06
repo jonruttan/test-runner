@@ -52,11 +52,14 @@ jobs:
           CFLAGS: -std=c11 -Wall -Wextra -Wno-unused-parameter -O0 -g --coverage
         run: |
           set -eu
-          rm -rf .coverage
           mkdir -p .coverage
-          OUTDIR=.coverage KEEP_OUTDIR=1 sh ./test-runner.sh tests
+          for t in tests/*.spec.c; do
+            out=".coverage/$(basename "$t" .c).out"
+            cc $CFLAGS -Iinclude "$t" -o "$out"
+            "$out"
+          done
 
       - name: Coverage Summary
         run: |
           set -eu
-          "$HOME/.local/bin/gcovr" -r . --object-directory .coverage --filter 'include/' --print-summary
+          "$HOME/.local/bin/gcovr" -r . --filter 'include/' --print-summary
