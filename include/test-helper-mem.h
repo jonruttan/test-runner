@@ -157,7 +157,7 @@ int helper_alloc_count(void)
 
 int helper_realloc_count(void)
 {
-	return _buffer_alloc_count;
+	return _buffer_realloc_count;
 }
 
 int helper_free_count(void)

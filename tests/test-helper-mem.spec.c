@@ -27,9 +27,28 @@ static char *test_alloc_error_returns_null(void)
 	return NULL;
 }
 
+static char *test_realloc_count_increments(void)
+{
+	helper_alloc_reset();
+	helper_set_alloc(MEM_GUARANTEED);
+
+	_it_should("realloc_count starts at 0", 0 == helper_realloc_count());
+
+	void *p = helper_malloc(16);
+	_it_should("malloc returns non-null", NULL != p);
+
+	void *q = helper_realloc(p, 16);
+	_it_should("realloc returns non-null", NULL != q);
+	_it_should("realloc_count increments", 1 == helper_realloc_count());
+
+	helper_free(q);
+	return NULL;
+}
+
 static char *run_tests(void)
 {
 	_run_test(test_alloc_guaranteed_counts);
 	_run_test(test_alloc_error_returns_null);
+	_run_test(test_realloc_count_increments);
 	return NULL;
 }
