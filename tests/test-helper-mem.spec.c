@@ -45,10 +45,42 @@ static char *test_realloc_count_increments(void)
 	return NULL;
 }
 
+static char *test_realloc_error_returns_null_and_counts(void)
+{
+	helper_alloc_reset();
+	helper_set_alloc(MEM_ERROR);
+
+	_it_should("realloc_count starts at 0", 0 == helper_realloc_count());
+	_it_should("realloc returns NULL", NULL == helper_realloc(NULL, 16));
+	_it_should("realloc_count increments", 1 == helper_realloc_count());
+
+	return NULL;
+}
+
+static char *test_hardcoded_allocators(void)
+{
+	helper_alloc_reset();
+	helper_set_alloc(MEM_HARDCODED);
+
+	void *p = helper_malloc(16);
+	_it_should("hardcoded malloc returns constant pointer", (void *)0xfacaded == p);
+
+	void *q = helper_realloc(p, 16);
+	_it_should("hardcoded realloc returns constant pointer", (void *)0xfacaded == q);
+	_it_should("realloc_count increments", 1 == helper_realloc_count());
+
+	helper_free(q);
+	_it_should("free_count increments via helper_free_null", 1 == helper_free_count());
+
+	return NULL;
+}
+
 static char *run_tests(void)
 {
 	_run_test(test_alloc_guaranteed_counts);
 	_run_test(test_alloc_error_returns_null);
 	_run_test(test_realloc_count_increments);
+	_run_test(test_realloc_error_returns_null_and_counts);
+	_run_test(test_hardcoded_allocators);
 	return NULL;
 }

@@ -35,9 +35,25 @@ static char *test_file_read(void)
 	return NULL;
 }
 
+static char *test_file_no_buffer_is_noop(void)
+{
+	char out[8];
+	memset(out, 0xA5, sizeof(out));
+
+	helper_file_buffer_ptr[TEST_HELPER_FILE_STDIN] = NULL;
+	helper_file_buffer_length[TEST_HELPER_FILE_STDIN] = TEST_HELPER_FILE_UNDEFINED;
+	helper_file_reset();
+
+	_it_should("read returns size even with NULL buffer", 4 == helper_file_read(TEST_HELPER_FILE_STDIN, out, 4));
+	_it_should("write returns size even with NULL buffer", 4 == helper_file_write(TEST_HELPER_FILE_STDIN, out, 4));
+
+	return NULL;
+}
+
 static char *run_tests(void)
 {
 	_run_test(test_file_write_and_str);
 	_run_test(test_file_read);
+	_run_test(test_file_no_buffer_is_noop);
 	return NULL;
 }

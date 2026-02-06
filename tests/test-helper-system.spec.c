@@ -8,8 +8,15 @@ static char *test_system_status_true_false(void)
 	return NULL;
 }
 
+static char *test_system_status_null_is_error(void)
+{
+	_it_should("NULL returns -1", -1 == helper_system_status(NULL));
+	return NULL;
+}
+
 static char *run_tests(void)
 {
 	_run_test(test_system_status_true_false);
+	_run_test(test_system_status_null_is_error);
 	return NULL;
 }
