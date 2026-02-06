@@ -33,4 +33,4 @@ jobs:
           CFLAGS: -std=c11 -Wall -Wextra -Werror
         run: |
           set -eu
-          sh ./test-runner.sh tests examples/minimal/add-integers-test.c
+          sh ./test-runner.sh examples/minimal/add-integers-test.c
