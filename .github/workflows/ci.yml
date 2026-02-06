@@ -1,0 +1,37 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  test:
+    name: ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Toolchain
+        run: |
+          set -eu
+          cc --version || true
+
+      - name: Self Tests
+        env:
+          CFLAGS: -std=c11 -Wall -Wextra -Werror -Wno-unused-parameter
+        run: |
+          set -eu
+          sh ./test-runner.sh tests
+
+      - name: Build Example
+        env:
+          CFLAGS: -std=c11 -Wall -Wextra -Werror
+        run: |
+          set -eu
+          cc $CFLAGS -Iinclude examples/minimal/add-integers-test.c -o /tmp/add-integers-test.out
+          /tmp/add-integers-test.out
