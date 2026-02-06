@@ -1,6 +1,9 @@
 # General Rules
 # Taken from <https://github.com/github/gitignore/blob/master/C.gitignore>
 
+# Secrets
+.env
+
 # Prerequisites
 *.d
 
