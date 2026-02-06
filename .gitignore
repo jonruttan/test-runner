@@ -54,9 +54,6 @@ Module.symvers
 Mkfile.old
 dkms.conf
 
-# Generated Documentation
-docs/
-
 # Project Specific Rules
 
 # Editor files

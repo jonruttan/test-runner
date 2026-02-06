@@ -132,6 +132,14 @@ A lightweight and portable unit testing framework for C.
    WARN: 4 tests (1 incomplete, 1 empty, 1 skipped), 3 assertions (1 skipped)
    ```
 
+## Documentation
+
+- `docs/`
+- `CONTRIBUTING.md`
+- `CHANGELOG.md`
+- `SECURITY.md`
+- `CODE_OF_CONDUCT.md`
+
 ## Roadmap
 
 See the [open issues](https://github.com/jonruttan/test-runner/issues) for a list of proposed features and known issues.
