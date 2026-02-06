@@ -12,9 +12,9 @@ static char *test_file_write_and_str(void)
 	helper_file_buffer_length[TEST_HELPER_FILE_STDOUT] = sizeof(buf);
 	helper_file_reset();
 
-	_it_should("write returns size", helper_file_write(TEST_HELPER_FILE_STDOUT, "hi", 2) == 2);
-	_it_should("str returns buffer", helper_file_str(TEST_HELPER_FILE_STDOUT) == buf);
-	_it_should("buffer contains string", strcmp(buf, "hi") == 0);
+	_it_should("write returns size", 2 == helper_file_write(TEST_HELPER_FILE_STDOUT, "hi", 2));
+	_it_should("str returns buffer", buf == helper_file_str(TEST_HELPER_FILE_STDOUT));
+	_it_should("buffer contains string", 0 == strcmp(buf, "hi"));
 
 	return NULL;
 }
@@ -29,8 +29,8 @@ static char *test_file_read(void)
 	helper_file_buffer_length[TEST_HELPER_FILE_STDIN] = 2;
 	helper_file_reset();
 
-	_it_should("read returns requested (clamped) size", helper_file_read(TEST_HELPER_FILE_STDIN, out, 4) == 2);
-	_it_should("out has first 2 bytes", out[0] == 'a' && out[1] == 'b');
+	_it_should("read returns requested (clamped) size", 2 == helper_file_read(TEST_HELPER_FILE_STDIN, out, 4));
+	_it_should("out has first 2 bytes", 'a' == out[0] && 'b' == out[1]);
 
 	return NULL;
 }
