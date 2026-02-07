@@ -53,8 +53,8 @@ container-build-alpine: ## Build the Alpine container image
 container-test-alpine: container-build-alpine ## Run the test suite inside the Alpine container
 	$(CONTAINER) run --rm $(CONTAINER_ENV) test-runner:alpine make test
 
-container-matrix-alpine: container-build-alpine ## Run the test suite inside Alpine using gcc/clang/tcc
-	$(CONTAINER) run --rm test-runner:alpine sh -lc 'for cc in gcc clang tcc; do command -v $$cc >/dev/null 2>&1 || { echo "skip: $$cc not installed"; continue; }; echo "CC=$$cc"; CC=$$cc make test; done'
+container-matrix-alpine: container-build-alpine ## Run the test suite inside Alpine using the installed compilers
+	$(CONTAINER) run --rm test-runner:alpine sh -lc 'for cc in $$(installed-compilers.sh); do echo "CC=$$cc"; CC=$$cc make test; done'
 
 container-build-glibc: ## Build the Debian (glibc) container image
 	$(CONTAINER) build -f container/debian/Dockerfile -t test-runner:glibc .
@@ -62,8 +62,8 @@ container-build-glibc: ## Build the Debian (glibc) container image
 container-test-glibc: container-build-glibc ## Run the test suite inside the Debian (glibc) container
 	$(CONTAINER) run --rm $(CONTAINER_ENV) test-runner:glibc make test
 
-container-matrix-glibc: container-build-glibc ## Run the test suite inside Debian (glibc) using gcc/clang/tcc
-	$(CONTAINER) run --rm test-runner:glibc sh -lc 'for cc in gcc clang tcc; do echo "CC=$$cc"; CC=$$cc make test; done'
+container-matrix-glibc: container-build-glibc ## Run the test suite inside Debian (glibc) using the installed compilers
+	$(CONTAINER) run --rm test-runner:glibc sh -lc 'for cc in $$(installed-compilers.sh); do echo "CC=$$cc"; CC=$$cc make test; done'
 
 container-coverage-glibc: container-build-glibc ## Run coverage inside Debian (glibc) container
 	$(CONTAINER) run --rm $(CONTAINER_ENV) test-runner:glibc make coverage

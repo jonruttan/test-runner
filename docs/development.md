@@ -34,6 +34,26 @@ make container-matrix-glibc
 make container-coverage-glibc
 ```
 
+The `container-matrix-*` targets delegate to a helper inside the container image (`test-runner-matrix`), so the container can decide which compilers are actually installed.
+
+To see what compilers an image will use:
+
+```sh
+make container-build-alpine
+docker run --rm test-runner:alpine installed-compilers.sh
+
+make container-build-glibc
+docker run --rm test-runner:glibc installed-compilers.sh
+```
+
+If you use Podman, replace `docker` with `podman` (or use `make CONTAINER=podman ...` for the Makefile targets).
+
+To override the compiler list used by the matrix runner:
+
+```sh
+make COMPILERS='gcc clang' container-matrix-glibc
+```
+
 To target a specific compiler inside a container, set `CC`:
 
 ```sh
@@ -48,6 +68,8 @@ make CFLAGS='-std=c11 -Wall -Wextra -Werror' container-test-glibc
 make WRAPPER='valgrind --quiet --leak-check=full --show-leak-kinds=all' container-test-glibc
 make SOURCES='src/foo.c src/bar.c' container-test-alpine
 ```
+
+Note: on Debian/glibc, running clang under valgrind can produce DWARF debug-info warnings. The container's `test-runner-matrix` helper adds `-gdwarf-4` for clang when valgrind is in use to reduce this noise.
 
 ## Adding tests
 
