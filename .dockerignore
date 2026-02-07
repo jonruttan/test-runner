@@ -1,0 +1,10 @@
+.git
+.coverage
+*.gcno
+*.gcda
+*.dSYM
+/tmp
+/tmp/
+tmp
+build
+.DS_Store

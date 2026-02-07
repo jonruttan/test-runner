@@ -135,6 +135,8 @@ A lightweight and portable unit testing framework for C.
 ## Documentation
 
 - `docs/`
+- `docs/usage.md` (running tests, environment variables)
+- `docs/development.md` (Makefile targets, containers, coverage, CI)
 - `CONTRIBUTING.md`
 - `CHANGELOG.md`
 - `SECURITY.md`
