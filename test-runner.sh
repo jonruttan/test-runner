@@ -19,17 +19,24 @@
 # ```
 #
 SCRIPT="$0"
-CC=${CC:-cc}
-INCLUDE="$(dirname "$SCRIPT")/include"
-CFLAGS=${CFLAGS:-"-Wall -Wextra -Wno-unused-parameter"}
-CFLAGS="${CFLAGS} -g -fdiagnostics-color=always -DDEBUG -DTESTS -I$INCLUDE"
+
 if [ -x "$(which valgrind)" ]; then
 	VALGRIND="valgrind --quiet --leak-check=full --show-leak-kinds=all"
 fi
+
+CC=${CC:-cc}
+INCLUDE="$(dirname "$SCRIPT")/include"
+CFLAGS=${CFLAGS:-"-Wall -Wextra -Wno-unused-parameter"}
 WRAPPER=${WRAPPER:-${VALGRIND}}
 ANALYZER=${ANALYZER:-}
-
 TESTS="${@:-tests}"
+
+# NOTE: Compatibility workaround for Valgrind
+if [ "${WRAPPER%% *}" = "valgrind" ]; then
+	CFLAGS="${CFLAGS} -gdwarf-4"
+fi
+
+CFLAGS="${CFLAGS} -g -fdiagnostics-color=always -DDEBUG -DTESTS -I$INCLUDE"
 
 # If $TESTS is a directory search it for tests
 if [ -d "$TESTS" ]; then
