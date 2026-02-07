@@ -6,6 +6,12 @@ This project intends to follow semantic versioning.
 
 - (none)
 
+## 1.7.1 - 2026-02-07
+
+- Run container builds/tests in CI (Ubuntu) and add Makefile targets to print installed container compilers.
+- Add `installed-compilers.sh` to container images and refactor the Dockerfiles to share a single implementation.
+- Reduce Valgrind DWARF warning noise by adding `-gdwarf-4` only for clang when running under Valgrind.
+
 ## 1.7.0 - 2026-02-07
 
 - Add a Makefile and update CI to use it (`make test`, `make example`, `make coverage`).

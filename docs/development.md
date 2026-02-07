@@ -28,9 +28,11 @@ The container engine defaults to `docker`, but you can use `podman` by setting `
 ```sh
 make container-test-alpine
 make container-matrix-alpine
+make container-compilers-alpine
 
 make container-test-glibc
 make container-matrix-glibc
+make container-compilers-glibc
 make container-coverage-glibc
 ```
 
@@ -83,6 +85,7 @@ GitHub Actions runs:
 - `make test`
 - `make example`
 - `make coverage` (Ubuntu-only)
+- container builds/tests (Ubuntu-only)
 
 Workflow: `.github/workflows/ci.yml`.
 
