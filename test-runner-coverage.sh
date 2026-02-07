@@ -16,7 +16,7 @@ command -v "$ANALYZER" >/dev/null 2>&1 || {
 	exit 1
 }
 
-[ "${ANALYZER:-}" = 'gcovr' ] && ANALYZER="$ANALYZER -r . --object-directory \"\$1\" --filter \"include/\" $GCOVR_FLAGS"
+[ "${ANALYZER:-}" = 'gcovr' ] && ANALYZER="$ANALYZER -r . --object-directory \"\$1\" --filter \"include/\" $ANALYZER_FLAGS"
 
 # Let test-runner.sh add its usual DEBUG/TESTS flags and -Iinclude; we add coverage flags.
 CFLAGS="${CFLAGS:-"-std=c11 -Wall -Wextra -Wno-unused-parameter -O0 -g --coverage"}"
