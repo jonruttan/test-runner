@@ -53,13 +53,13 @@ void helper_free_guaranteed(void *ptr)
 {
 	int i;
 
-	for (i=_buffer_index; i; i--) {
+	for (i=_buffer_index; i >= 0; i--) {
 		if (_alloc_ptrs[i] == ptr) {
 			break;
 		}
 	}
 
-	if (i >= 0) {
+	if (i >= 0 && _alloc_ptrs[i] == ptr) {
 		memset(_alloc_buffer[i], FREE_CHAR, ALLOC_SIZE);
 		_buffer_free_count++;
 	}

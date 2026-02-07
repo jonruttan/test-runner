@@ -100,15 +100,14 @@ static char *test_free_guaranteed_breaks_on_match(void)
 	_it_should("free_count increments", 1 == helper_free_count());
 
 	/*
-	 * NOTE: helper_free_guaranteed() treats unknown pointers as index 0 and
-	 * increments the free count. This test asserts current behavior.
+	 * Unknown pointers should not be counted as frees.
 	 */
 	helper_free((void *)0x1234);
-	_it_should("free_count increments for unknown ptr", 2 == helper_free_count());
+	_it_should("free_count unchanged for unknown ptr", 1 == helper_free_count());
 
 	/* Keep p2 alive to avoid clobbering internal state between frees. */
 	helper_free(p2);
-	_it_should("free_count increments again", 3 == helper_free_count());
+	_it_should("free_count increments again", 2 == helper_free_count());
 
 	return NULL;
 }
