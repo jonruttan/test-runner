@@ -26,14 +26,14 @@ jobs:
           CFLAGS: -std=c11 -Wall -Wextra -Werror -Wno-unused-parameter
         run: |
           set -eu
-          sh ./test-runner.sh
+          make test
 
       - name: Build Example
         env:
           CFLAGS: -std=c11 -Wall -Wextra -Werror
         run: |
           set -eu
-          sh ./test-runner.sh examples/minimal/add-integers-test.c
+          make example
 
   coverage:
     name: coverage (ubuntu)
@@ -52,9 +52,4 @@ jobs:
           CFLAGS: -std=c11 -Wall -Wextra -Wno-unused-parameter -O0 -g --coverage
         run: |
           set -eu
-          sh ./test-runner-coverage.sh
-
-      - name: Coverage Summary
-        run: |
-          set -eu
-          "$HOME/.local/bin/gcovr" -r . --filter 'include/' --print-summary
+          make coverage
