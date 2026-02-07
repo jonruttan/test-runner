@@ -15,17 +15,7 @@ RUN apk add --no-cache tcc || echo "tcc not available for this arch/repo; skippi
 
 # Container-provided helpers so the Makefile doesn't have to guess what is installed.
 # `installed-compilers.sh` prints the available compiler executables (space-separated).
-RUN cat > /usr/local/bin/installed-compilers.sh <<'EOF'
-#!/bin/sh
-out=""
-for cc in gcc clang tcc; do
-	if command -v "$cc" >/dev/null 2>&1; then
-		out="${out}${out:+ }$cc"
-	fi
-done
-
-echo "$out"
-EOF
+COPY container/installed-compilers.sh /usr/local/bin/installed-compilers.sh
 RUN chmod +x /usr/local/bin/installed-compilers.sh
 
 WORKDIR /work
