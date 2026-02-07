@@ -1,8 +1,8 @@
 .DEFAULT_GOAL := help
 
 .PHONY: help test example coverage clean \
-	container-build-alpine container-test-alpine container-matrix-alpine \
-	container-build-glibc container-test-glibc container-matrix-glibc container-coverage-glibc
+	container-build-alpine container-test-alpine container-matrix-alpine container-compilers-alpine \
+	container-build-glibc container-test-glibc container-matrix-glibc container-compilers-glibc container-coverage-glibc
 
 CC ?= cc
 CONTAINER ?= docker
@@ -56,6 +56,9 @@ container-test-alpine: container-build-alpine ## Run the test suite inside the A
 container-matrix-alpine: container-build-alpine ## Run the test suite inside Alpine using the installed compilers
 	$(CONTAINER) run --rm test-runner:alpine sh -lc 'for cc in $$(installed-compilers.sh); do echo "CC=$$cc"; CC=$$cc make test; done'
 
+container-compilers-alpine: container-build-alpine ## Print compilers installed in the Alpine container image
+	$(CONTAINER) run --rm test-runner:alpine installed-compilers.sh
+
 container-build-glibc: ## Build the Debian (glibc) container image
 	$(CONTAINER) build -f container/debian/Dockerfile -t test-runner:glibc .
 
@@ -64,6 +67,9 @@ container-test-glibc: container-build-glibc ## Run the test suite inside the Deb
 
 container-matrix-glibc: container-build-glibc ## Run the test suite inside Debian (glibc) using the installed compilers
 	$(CONTAINER) run --rm test-runner:glibc sh -lc 'for cc in $$(installed-compilers.sh); do echo "CC=$$cc"; CC=$$cc make test; done'
+
+container-compilers-glibc: container-build-glibc ## Print compilers installed in the Debian (glibc) container image
+	$(CONTAINER) run --rm test-runner:glibc installed-compilers.sh
 
 container-coverage-glibc: container-build-glibc ## Run coverage inside Debian (glibc) container
 	$(CONTAINER) run --rm $(CONTAINER_ENV) test-runner:glibc make coverage

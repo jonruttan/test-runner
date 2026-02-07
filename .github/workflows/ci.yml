@@ -35,6 +35,30 @@ jobs:
           set -eu
           make example
 
+  container:
+    name: containers (ubuntu)
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Container Engine
+        run: |
+          set -eu
+          docker version
+
+      - name: Alpine Container
+        run: |
+          set -eu
+          make container-test-alpine
+          make container-compilers-alpine
+
+      - name: Debian (glibc) Container
+        run: |
+          set -eu
+          make container-test-glibc
+          make container-compilers-glibc
+
   coverage:
     name: coverage (ubuntu)
     runs-on: ubuntu-latest
