@@ -27,4 +27,6 @@ Project-specific instructions for AI agents working in this repository.
 
 ## Commits
 
-If asked to create commits, follow `docs/commit_guidelines.md`.
+- Never run `git commit`, `git rebase`, or any history-editing command unless the user explicitly requests it for that specific change.
+- If a commit is desired, propose the commit message (per `docs/commit_guidelines.md`) and wait for explicit approval (e.g. "commit it", "approved to commit").
+- If a mistaken commit happens, prefer `git revert` to undo it unless the user explicitly requests a different history rewrite.
