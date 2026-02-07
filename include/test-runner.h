@@ -36,13 +36,13 @@
  */
 /*
  * The current version of the Test Runner. Version numbering conforms to the
- * [Symantic Versioning] spec.
+ * [Semantic Versioning] spec.
  *
- * [Symantic Versioning]: http://semver.org/
+ * [Semantic Versioning]: http://semver.org/
  *
  * @constant TEST_RUNNER_VERSION
  */
-#define TEST_RUNNER_VERSION "1.6.1"
+#define TEST_RUNNER_VERSION "1.7.0"
 
 #define _TNORM "\x1B[0m"
 #define _TPASS "\x1B[1;30;42m"

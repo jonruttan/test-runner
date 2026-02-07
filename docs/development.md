@@ -125,3 +125,15 @@ ANALYZER=gcovr ANALYZER_FLAGS='--print-summary' sh ./test-runner-coverage.sh tes
 ## Commit messages
 
 See `docs/commit_guidelines.md`.
+
+## Releasing
+
+This project uses SemVer. The current version lives in `include/test-runner.h` as `TEST_RUNNER_VERSION`.
+
+Suggested release steps:
+
+1. Update `TEST_RUNNER_VERSION`.
+2. Move relevant entries from `## Unreleased` into a new `## X.Y.Z - YYYY-MM-DD` section in `CHANGELOG.md`.
+3. Run `make test`, `make example`, and `make coverage` (and optionally `make container-test-glibc`).
+4. Commit the release bump.
+5. Tag and push: `git tag -a vX.Y.Z -m "vX.Y.Z"` and `git push --tags`.
