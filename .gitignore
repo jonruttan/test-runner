@@ -66,3 +66,7 @@ dkms.conf
 # Scratchpad
 tmp/
 \#*
+
+# Coverage artifacts
+*.gcda
+*.gcno
