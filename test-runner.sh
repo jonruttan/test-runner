@@ -66,12 +66,8 @@ do
 	echo "${test}"
 	out="$OUTDIR/$(basename ${test}.out)"
 	$CC $CFLAGS $SOURCES "${test}" -o "${out}" && $WRAPPER "${out}" || rc=1
-	# [ -x "${out}" ] && rm "${out}"
-	# [ -d "${out}.dSYM" ] && rm -Rf "${out}.dSYM"
 done
 
-# ANALYZER is a shell snippet that receives OUTDIR as $1 and runs before cleanup.
-# Example: ANALYZER='gcovr -r . --object-directory "$1" --filter "include/" --print-summary'
 [ -z "${ANALYZER:-}" ] || sh -c "$ANALYZER" sh "$OUTDIR"
 
 exit "$rc"
