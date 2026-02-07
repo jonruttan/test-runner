@@ -32,7 +32,7 @@ ANALYZER=${ANALYZER:-}
 TESTS="${@:-tests}"
 
 # NOTE: Compatibility workaround for Valgrind
-if [ "${WRAPPER%% *}" = "valgrind" ]; then
+if [ "${WRAPPER%% *}" = "valgrind" ] && [ "${CC%% *}" = "clang" ]; then
 	CFLAGS="${CFLAGS} -gdwarf-4"
 fi
 
