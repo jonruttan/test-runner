@@ -27,8 +27,14 @@ if [ -x "$(which valgrind)" ]; then
 	VALGRIND="valgrind --quiet --leak-check=full --show-leak-kinds=all"
 fi
 WRAPPER=${WRAPPER:-${VALGRIND}}
+ANALYZER=${ANALYZER:-}
 
 TESTS="${@:-tests}"
+
+# If $TESTS is a directory search it for tests
+if [ -d "$TESTS" ]; then
+	TESTS="$TESTS/*.spec.c"
+fi
 
 OUTDIR="$(mktemp -d 2>/dev/null)" || OUTDIR="$(mktemp -d -t test-runner 2>/dev/null)" || {
 	echo "ERROR: mktemp -d failed" >&2
@@ -41,5 +47,31 @@ cleanup() {
 
 trap cleanup EXIT HUP INT TERM
 
-OUTDIR="$OUTDIR" CC="$CC" CFLAGS="$CFLAGS" SOURCES="$SOURCES" WRAPPER="$WRAPPER" \
-	sh test-runner-core.sh $TESTS
+# Determine correct `stat` formatting parameters
+# Use GNU stat formatting
+STAT="stat -c '%Y %n'"
+# Try to stat this file, on error use *BSD formatting
+eval $STAT "$0" 1>/dev/null 2>/dev/null || STAT="stat -f '%m %N'"
+
+# Sort by Modified date
+TESTS=$(eval $STAT $TESTS | sort -t ' ' -nk1 | cut -d ' ' -f2-)
+
+cmd=${WRAPPER%% *}
+[ -z "${WRAPPER:-}" ] || command -v "$cmd" >/dev/null 2>&1 || WRAPPER=
+
+rc=0
+
+for test in $TESTS
+do
+	echo "${test}"
+	out="$OUTDIR/$(basename ${test}.out)"
+	$CC $CFLAGS $SOURCES "${test}" -o "${out}" && $WRAPPER "${out}" || rc=1
+	# [ -x "${out}" ] && rm "${out}"
+	# [ -d "${out}.dSYM" ] && rm -Rf "${out}.dSYM"
+done
+
+# ANALYZER is a shell snippet that receives OUTDIR as $1 and runs before cleanup.
+# Example: ANALYZER='gcovr -r . --object-directory "$1" --filter "include/" --print-summary'
+[ -z "${ANALYZER:-}" ] || sh -c "$ANALYZER" sh "$OUTDIR"
+
+exit "$rc"

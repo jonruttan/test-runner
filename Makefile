@@ -8,13 +8,13 @@ INCLUDE_DIR := include
 TEST_RUNNER_SH := ./test-runner.sh
 
 # Default flags should match CI expectations (overrideable by env/command line).
-CFLAGS ?= -std=c11 -Wall -Wextra -Werror -Wno-unused-parameter
+CFLAGS ?= -Wall -Wextra -Werror -Wno-unused-parameter
 
 TESTS_DIR := tests
 TEST_GLOB := $(TESTS_DIR)/*.spec.c
 
-COVERAGE_DIR := .coverage
-COVERAGE_CFLAGS ?= -std=c11 -Wall -Wextra -Wno-unused-parameter -O0 -g --coverage
+COVERAGE_ANALYZER ?= gcovr
+COVERAGE_CFLAGS ?= $(CFLAGS) -O0 -g --coverage
 COVERAGE_FLAGS ?= --print-summary
 
 help: ## Display this help section
@@ -23,12 +23,11 @@ help: ## Display this help section
 test: ## Run self-tests (via test-runner.sh)
 	sh $(TEST_RUNNER_SH) $(TESTS_DIR)
 
+coverage: ## Run line coverage (requires gcovr)
+	CFLAGS="$(COVERAGE_CFLAGS)" ANALYZER=gcovr sh ./test-runner-coverage.sh $(TESTS_DIR)
+
 example: ## Build/run minimal example
 	sh $(TEST_RUNNER_SH) examples/minimal/add-integers-test.c
-
-coverage: ## Run line coverage (requires gcovr)
-	OUTDIR=$(COVERAGE_DIR) CC=$(CC) CFLAGS="$(COVERAGE_CFLAGS)" GCOVR=gcovr \
-		sh ./test-runner-coverage.sh $(TESTS_DIR)
 
 clean: ## Remove coverage artifacts
 	rm -rf $(COVERAGE_DIR)

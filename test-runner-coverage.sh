@@ -3,51 +3,24 @@
 #
 # test-runner-coverage.sh
 #
-# Build and run tests with coverage enabled, then print a gcovr summary.
+# Configure coverage flags and run gcovr via test-runner's ANALYZER hook.
 #
 # Usage:
 #   sh ./test-runner-coverage.sh [tests|<glob>|<file1> <file2> ...]
 #
-# Environment:
-#   OUTDIR  Output directory for artifacts (default: .coverage)
-#   CC      C compiler (default: cc)
-#   CFLAGS  Compile flags (default: coverage-friendly flags + -Iinclude)
-#   GCOVR   gcovr binary name/path (default: gcovr)
-#
+ANALYZER="${ANALYZER:-gcovr}"
+ANALYZER_FLAGS="${ANALYZER_FLAGS:---print-summary}"
 
-set -eu
-
-SCRIPT="$0"
-ROOT="$(CDPATH= cd -- "$(dirname -- "$SCRIPT")" && pwd)"
-
-CORE="$ROOT/test-runner-core.sh"
-OUTDIR="${OUTDIR:-$ROOT/.coverage}"
-CC="${CC:-cc}"
-GCOVR="${GCOVR:-gcovr}"
-GCOVR_FLAGS="${GCOVR_FLAGS:---print-summary}"
-
-INCLUDE="$ROOT/include"
-if [ -z "${CFLAGS:-}" ]; then
-	CFLAGS="-std=c11 -Wall -Wextra -Wno-unused-parameter -O0 -g --coverage -I$INCLUDE"
-else
-	# Ensure include/ is on the path when callers override CFLAGS.
-	CFLAGS="$CFLAGS -I$INCLUDE"
-fi
-
-if [ ! -f "$CORE" ]; then
-	echo "ERROR: missing core runner: $CORE" >&2
-	exit 1
-fi
-
-command -v "$GCOVR" >/dev/null 2>&1 || {
-	echo "ERROR: gcovr not found (install: python3 -m pip install --user gcovr)" >&2
+command -v "$ANALYZER" >/dev/null 2>&1 || {
+	echo "ERROR: $ANALYZER not found" >&2
 	exit 1
 }
 
-rm -rf -- "$OUTDIR"
-mkdir -p -- "$OUTDIR"
+[ "${ANALYZER:-}" = 'gcovr' ] && ANALYZER="$ANALYZER -r . --object-directory \"\$1\" --filter \"include/\" $GCOVR_FLAGS"
 
-OUTDIR="$OUTDIR" CC="$CC" CFLAGS="$CFLAGS" \
-	sh "$CORE" "$@"
+# Let test-runner.sh add its usual DEBUG/TESTS flags and -Iinclude; we add coverage flags.
+CFLAGS="${CFLAGS:-"-std=c11 -Wall -Wextra -Wno-unused-parameter -O0 -g --coverage"}"
 
-"$GCOVR" -r "$ROOT" --object-directory "$OUTDIR" --filter 'include/' $GCOVR_FLAGS
+# OUTDIR is created by test-runner.sh. We want gcovr to see that resolved path, so
+# ANALYZER is evaluated in test-runner.sh and OUTDIR is passed as $1.
+CFLAGS="$CFLAGS" ANALYZER="$ANALYZER" sh test-runner.sh "$@"
