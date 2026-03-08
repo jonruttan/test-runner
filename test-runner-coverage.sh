@@ -1,4 +1,4 @@
-#!/usr/bin/env sh
+#!/bin/sh
 
 #
 # test-runner-coverage.sh

@@ -1,4 +1,4 @@
-#!/usr/bin/env sh
+#!/bin/sh
 
 #
 # # Test Runner in a C header
