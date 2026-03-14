@@ -35,6 +35,16 @@ size_t helper_file_buffer_length[TEST_HELPER_FILE_DESCRIPTORS] = {
 		TEST_HELPER_FILE_UNDEFINED, TEST_HELPER_FILE_UNDEFINED
 	};
 
+/* Total remaining bytes for read.  Set to a byte count to simulate
+ * finite input; each read decrements it; returns 0 (EOF) when exhausted.
+ * UNDEFINED means unlimited (default). */
+size_t helper_file_buffer_remaining[TEST_HELPER_FILE_DESCRIPTORS] = {
+		TEST_HELPER_FILE_UNDEFINED, TEST_HELPER_FILE_UNDEFINED,
+		TEST_HELPER_FILE_UNDEFINED, TEST_HELPER_FILE_UNDEFINED,
+		TEST_HELPER_FILE_UNDEFINED, TEST_HELPER_FILE_UNDEFINED,
+		TEST_HELPER_FILE_UNDEFINED, TEST_HELPER_FILE_UNDEFINED
+	};
+
 void helper_file_reset(void)
 {
 	int fd;
@@ -61,6 +71,12 @@ ssize_t helper_file_read(int fd, void *p_buf, size_t size)
 	if (helper_file_buffer_ptr[fd]) {
 		if (helper_file_buffer_length[fd] != TEST_HELPER_FILE_UNDEFINED && size > helper_file_buffer_length[fd]) {
 			size = helper_file_buffer_length[fd];
+		}
+
+		if (helper_file_buffer_remaining[fd] != TEST_HELPER_FILE_UNDEFINED) {
+			if (size > helper_file_buffer_remaining[fd])
+				size = helper_file_buffer_remaining[fd];
+			helper_file_buffer_remaining[fd] -= size;
 		}
 
 /*		max = strlen(helper_file_buffer_ptr[fd]);

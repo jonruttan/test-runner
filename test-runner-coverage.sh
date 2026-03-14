@@ -5,22 +5,33 @@
 #
 # Configure coverage flags and run gcovr via test-runner's ANALYZER hook.
 #
-# Usage:
-#   sh ./test-runner-coverage.sh [tests|<glob>|<file1> <file2> ...]
+# Usage (from project root):
+#   sh tests/c/test-runner/test-runner-coverage.sh [tests|<glob>|<file1> ...]
 #
+# Environment variables:
+#   ANALYZER       - coverage tool (default: gcovr)
+#   ANALYZER_FLAGS - extra flags (default: --print-summary)
+#   CFLAGS         - compiler flags (coverage flags are appended)
+#   COVERAGE_DIR   - HTML report output directory (default: .coverage)
+#
+SCRIPT="$(dirname "$0")"
 ANALYZER="${ANALYZER:-gcovr}"
 ANALYZER_FLAGS="${ANALYZER_FLAGS:---print-summary}"
+COVERAGE_DIR="${COVERAGE_DIR:-.coverage}"
 
 command -v "$ANALYZER" >/dev/null 2>&1 || {
-	echo "ERROR: $ANALYZER not found" >&2
+	echo "ERROR: $ANALYZER not found — install with: pip install gcovr" >&2
 	exit 1
 }
 
-[ "${ANALYZER:-}" = 'gcovr' ] && ANALYZER="$ANALYZER -r . --object-directory \"\$1\" --filter \"include/\" $ANALYZER_FLAGS"
+if [ "${ANALYZER:-}" = 'gcovr' ]; then
+	ANALYZER="$ANALYZER -r . --object-directory \"\$1\" --filter 'src/' $ANALYZER_FLAGS --html-details $COVERAGE_DIR/index.html"
+fi
 
-# Let test-runner.sh add its usual DEBUG/TESTS flags and -Iinclude; we add coverage flags.
-CFLAGS="${CFLAGS:-"-std=c11 -Wall -Wextra -Wno-unused-parameter -O0 -g --coverage"}"
+# Ensure coverage output directory exists
+mkdir -p "$COVERAGE_DIR"
 
-# OUTDIR is created by test-runner.sh. We want gcovr to see that resolved path, so
-# ANALYZER is evaluated in test-runner.sh and OUTDIR is passed as $1.
-CFLAGS="$CFLAGS" ANALYZER="$ANALYZER" sh test-runner.sh "$@"
+# Append coverage instrumentation flags to whatever CFLAGS are set
+CFLAGS="${CFLAGS} -O0 --coverage"
+
+CFLAGS="$CFLAGS" ANALYZER="$ANALYZER" sh "$SCRIPT/test-runner.sh" "$@"
