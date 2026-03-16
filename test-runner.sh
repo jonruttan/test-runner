@@ -37,6 +37,12 @@ if [ "${WRAPPER%% *}" = "valgrind" ] && [ "${CC%% *}" = "clang" ]; then
 fi
 
 CFLAGS="${CFLAGS} -g -fdiagnostics-color=always -DDEBUG -DTESTS -I$INCLUDE"
+LDLIBS=${LDLIBS:-}
+
+# Linux needs explicit -ldl for dlopen/dlsym
+case "$(uname -s)" in
+  Linux) LDLIBS="${LDLIBS} -ldl -lm" ;;
+esac
 
 # If $TESTS is a directory search it for tests
 if [ -d "$TESTS" ]; then
@@ -72,7 +78,7 @@ for test in $TESTS
 do
 	echo "${test}"
 	out="$OUTDIR/$(basename ${test}.out)"
-	$CC $CFLAGS $SOURCES "${test}" -o "${out}" && $WRAPPER "${out}" || rc=1
+	$CC $CFLAGS $SOURCES "${test}" $LDLIBS -o "${out}" && $WRAPPER "${out}" || rc=1
 done
 
 [ -z "${ANALYZER:-}" ] || sh -c "$ANALYZER" sh "$OUTDIR"
