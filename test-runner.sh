@@ -41,7 +41,7 @@ LDLIBS=${LDLIBS:-}
 
 # Linux needs explicit -ldl for dlopen/dlsym
 case "$(uname -s)" in
-  Linux) LDLIBS="${LDLIBS} -ldl -lm" ;;
+  Linux) LDLIBS="${LDLIBS} -ldl -lm" ; CFLAGS="${CFLAGS} -rdynamic" ;;
 esac
 
 # If $TESTS is a directory search it for tests
