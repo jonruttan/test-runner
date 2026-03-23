@@ -30,6 +30,10 @@ void *helper_alloc_guaranteed(size_t nmemb, size_t size)
 {
 	_buffer_index++;
 	_buffer_alloc_count++;
+	if (_buffer_index >= BUFFERS || nmemb * size > ALLOC_SIZE) {
+		_buffer_index--;
+		return calloc(nmemb, size);
+	}
 	memset(_alloc_buffer[_buffer_index], 0, nmemb * size);
 	memset(_alloc_buffer[_buffer_index] + (nmemb * size), FREE_CHAR, ALLOC_SIZE - (nmemb * size));
 	return (_alloc_ptrs[_buffer_index] = _alloc_buffer[_buffer_index]);
