@@ -14,7 +14,7 @@
 #   CFLAGS         - compiler flags (coverage flags are appended)
 #   COVERAGE_DIR   - HTML report output directory (default: .coverage)
 #
-SCRIPT="$(dirname "$0")"
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 ANALYZER="${ANALYZER:-gcovr}"
 ANALYZER_FLAGS="${ANALYZER_FLAGS:---print-summary}"
 COVERAGE_DIR="${COVERAGE_DIR:-.coverage}"
@@ -34,4 +34,4 @@ mkdir -p "$COVERAGE_DIR"
 # Append coverage instrumentation flags to whatever CFLAGS are set
 CFLAGS="${CFLAGS} -O0 --coverage"
 
-CFLAGS="$CFLAGS" ANALYZER="$ANALYZER" sh "$SCRIPT/test-runner.sh" "$@"
+CFLAGS="$CFLAGS" ANALYZER="$ANALYZER" sh "$SCRIPT_DIR/test-runner.sh" "$@"
