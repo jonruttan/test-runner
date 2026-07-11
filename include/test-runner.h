@@ -146,8 +146,6 @@ static char *run_tests();
 
 #define UNUSED(x) (void)(x)
 
-void *_stack_base;
-
 int main(int argc, char *argv[]) {
 	UNUSED(argc);
 	UNUSED(argv);
@@ -157,7 +155,6 @@ int main(int argc, char *argv[]) {
 
 	srand(start);
 
-	_stack_base = &argc;
 	result = run_tests();
 	printf("\n");
 
